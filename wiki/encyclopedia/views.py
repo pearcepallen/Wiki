@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django import forms
+from django.http import HttpResponseRedirect
+from django.urls import reverse
 from . import util
 
 import markdown2
@@ -28,7 +30,28 @@ def search(request):
     if request.method == "GET":
         query = request.GET.get('q')
 
-    return entry(request, query)
+        #If query is an exact match of term in encyclopedia
+        if util.get_entry(query):
+            return HttpResponseRedirect(reverse("entry", args=[query]))
+
+        #If query is substring
+        substring_match = []
+        entries = util.list_entries()
+        for entry in entries:
+            if query.lower() in entry.lower():
+                substring_match.append(entry)
+        
+        if not substring_match:
+            return render(request, "encyclopedia/entry_notfound.html",{
+                "name": query
+            })
+
+        return render(request, "encyclopedia/search.html",{
+            "search": query.upper(),
+            "results": substring_match
+        })
+
+    
     
 
 

@@ -5,11 +5,12 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Search Results</h1>
+    <h1>{{search}}</h1>
 
-    {{result | safe}}
-    <!--<ul>
-        <li>{{result}}</li>
-    </ul>-->
+    <ul>
+        {% for result in results %}
+            <li><a href="{% url 'entry' result %}">{{ result }}</a></li>
+        {% endfor %}
+    </ul>
 
 {% endblock %}

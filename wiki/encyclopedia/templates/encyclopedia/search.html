@@ -7,10 +7,9 @@
 {% block body %}
     <h1>Search Results</h1>
 
-    <ul>
-        {% for entry in entries %}
-            <li>Test1</li>
-        {% endfor %}
-    </ul>
+    {{result | safe}}
+    <!--<ul>
+        <li>{{result}}</li>
+    </ul>-->
 
 {% endblock %}

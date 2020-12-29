@@ -5,7 +5,7 @@ from . import util
 import markdown2
 
 class SearchForm(forms.Form):
-    search = forms.CharField(label="Search Encyclopedia")
+    search = forms.CharField(label="Search")
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -25,7 +25,11 @@ def entry(request, name):
         })
 
 def search(request):
-    return render(request, "encyclopedia/search.html")
+    if request.method == "GET":
+        query = request.GET.get('q')
+
+    return entry(request, query)
+    
 
 
 

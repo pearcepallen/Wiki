@@ -1,12 +1,16 @@
 from django.shortcuts import render
-from django.http import HttpResponse
+from django import forms
 from . import util
 
 import markdown2
 
+class SearchForm(forms.Form):
+    search = forms.CharField(label="Search Encyclopedia")
+
 def index(request):
     return render(request, "encyclopedia/index.html", {
-        "entries": util.list_entries()
+        "entries": util.list_entries(),
+        "form": SearchForm()
     })
 
 def entry(request, name):
@@ -19,5 +23,11 @@ def entry(request, name):
         return render(request, "encyclopedia/entry_notfound.html",{
             "name": name
         })
+
+def search(request):
+    return render(request, "encyclopedia/search.html")
+
+
+
 
 

@@ -53,15 +53,26 @@ def search(request):
 
 def create(request):
     if request.method == "POST":
-        title = request.POST.get("page_title")
-        content = request.POST.get("page_markdown")
+        #Take data submitted and save as form
+        form = NewPageForm(request.POST)
 
-        if util.get_entry(title):
-            return render(request, "encyclopedia/entry_exists.html",{
-                "title": title  
-            })
+        if form.is_valid():
+            title = form.cleaned_data["page_title"]
+            content = form.cleaned_data["page_markdown"]
 
-    return render(request, "encyclopedia/create.html")
+            #Check if entry already exists 
+            if util.get_entry(title):
+                return render(request, "encyclopedia/entry_exists.html",{
+                    "title": title  
+                })
+            #Saves form information to disk
+            util.save_entry(title, content)
+            
+            return HttpResponseRedirect(reverse("entry", args=[title]))
+
+    return render(request, "encyclopedia/create.html", {
+        "form": NewPageForm()
+    })
 
 
     

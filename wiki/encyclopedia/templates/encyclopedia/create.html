@@ -8,12 +8,7 @@
     <h1>Create New Page</h1>
         <form action="{% url 'create' %}" method="POST" style="text-align: center;">
             {% csrf_token %}
-            <div><input type="text" name="page_title" placeholder="Enter page title here" style="width: 40%;"></div>
-            <div>
-                <textarea name="page_markdown" style="width:70%; height: 400px;" >
-                    Enter page markdown here....
-                </textarea>
-            </div>
+            {{form}}
             <div><input type="submit" value="Save New Page "></div>  
         </form>
 {% endblock %}

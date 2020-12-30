@@ -8,7 +8,9 @@
     <h1>Create New Page</h1>
         <form action="{% url 'create' %}" method="POST" style="text-align: center;">
             {% csrf_token %}
-            {{form}}
+            <table style="width: 100%;">
+                {{form}}
+            </table>
             <div><input type="submit" value="Save New Page "></div>  
         </form>
 {% endblock %}

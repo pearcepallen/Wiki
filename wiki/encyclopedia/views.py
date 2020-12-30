@@ -7,11 +7,11 @@ from . import util
 import markdown2
 
 class NewPageForm(forms.Form):
-    page_title = forms.CharField()
-    page_markdown = forms.CharField(label=False, widget=forms.Textarea)
+    page_title = forms.CharField(label=False, widget=forms.TextInput(attrs={'placeholder':'Enter entry title'}))
+    page_markdown = forms.CharField(label=False, widget=forms.Textarea(attrs={'placeholder':'Enter content markdown', 'style': 'height: 10%;'}))
 
 class EditPageForm(forms.Form):
-    edit_markdown = forms.CharField(label=False, widget=forms.Textarea)
+    edit_markdown = forms.CharField(label=False, widget=forms.Textarea(attrs={'style': 'height: 10%;'}))
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -78,6 +78,14 @@ def create(request):
     })
 
 def edit(request, name):
+    if request.method == "POST":
+        #Take data submitted and save as form
+        form = EditPageForm(request.POST)
+
+        if form.is_valid():
+            content = form.cleaned_data["edit_markdown"]
+            util.save_entry(name, content)
+            return HttpResponseRedirect(reverse("entry", args=[name]))
 
     initial_dict={"edit_markdown": util.get_entry(name)}
     return render(request, "encyclopedia/edit.html", {

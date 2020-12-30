@@ -8,7 +8,10 @@ import markdown2
 
 class NewPageForm(forms.Form):
     page_title = forms.CharField()
-    page_markdown = forms.CharField(widget=forms.Textarea)
+    page_markdown = forms.CharField(label=False, widget=forms.Textarea)
+
+class EditPageForm(forms.Form):
+    edit_markdown = forms.CharField(label=False, widget=forms.Textarea)
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
@@ -73,6 +76,15 @@ def create(request):
     return render(request, "encyclopedia/create.html", {
         "form": NewPageForm()
     })
+
+def edit(request, name):
+
+    initial_dict={"edit_markdown": util.get_entry(name)}
+    return render(request, "encyclopedia/edit.html", {
+        "form": EditPageForm(initial = initial_dict),
+        "name": name
+    })
+
 
 
     

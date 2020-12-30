@@ -6,13 +6,13 @@ from . import util
 
 import markdown2
 
-class SearchForm(forms.Form):
-    search = forms.CharField(label="Search")
+class NewPageForm(forms.Form):
+    page_title = forms.CharField()
+    page_markdown = forms.CharField(widget=forms.Textarea)
 
 def index(request):
     return render(request, "encyclopedia/index.html", {
         "entries": util.list_entries(),
-        "form": SearchForm()
     })
 
 def entry(request, name):
@@ -50,6 +50,19 @@ def search(request):
             "search": query.upper(),
             "results": substring_match
         })
+
+def create(request):
+    if request.method == "POST":
+        title = request.POST.get("page_title")
+        content = request.POST.get("page_markdown")
+
+        if util.get_entry(title):
+            return render(request, "encyclopedia/entry_exists.html",{
+                "title": title  
+            })
+
+    return render(request, "encyclopedia/create.html")
+
 
     
     

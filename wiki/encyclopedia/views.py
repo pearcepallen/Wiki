@@ -3,7 +3,7 @@ from django import forms
 from django.http import HttpResponseRedirect
 from django.urls import reverse
 from . import util
-
+import random
 import markdown2
 
 class NewPageForm(forms.Form):
@@ -92,6 +92,12 @@ def edit(request, name):
         "form": EditPageForm(initial = initial_dict),
         "name": name
     })
+
+def random_page(request): #do not name random to avoid overriding/overloading
+    entries = util.list_entries()
+    rand_entry = random.choice(entries)
+    
+    return HttpResponseRedirect(reverse("entry", args=[rand_entry]))
 
 
 
